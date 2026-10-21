@@ -163,7 +163,29 @@ public class InsurancePolicy {
 
         @Override
         public InsurancePolicy build() {
+            validate();
             return new InsurancePolicy(this);
+        }
+
+        private void validate() {
+            if (holderName == null || holderName.isBlank()) {
+                throw new PolicyValidationException("Name not found");
+            }
+            if (startDate == null || endDate == null) {
+                throw new PolicyValidationException("Date is must be ");
+            }
+            if (!endDate.isAfter(startDate)) {
+                throw new PolicyValidationException("The dates do not match");
+            }
+            if (coverageAmount <= 0) {
+                throw new PolicyValidationException("Coverage amount must be positive");
+            }
+            if (includeExtremeSports & coverageAmount < 50000) {
+                throw new PolicyValidationException("Extreme sports requires coverage of at least 50000");
+            }
+            if (deductible < 50) {
+                throw new PolicyValidationException("Deductibal must be >= 50%");
+            }
         }
     }
 
